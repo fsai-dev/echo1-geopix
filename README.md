@@ -1,8 +1,11 @@
 # echo1-geopix
+
+## Installation
 ```sh
 pip install echo1-geopix
 ```
 
+## Getting Started
 ```python
 from loguru import logger
 from echo1_geopix.echo1_geopix import (
