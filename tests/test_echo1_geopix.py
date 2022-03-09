@@ -1,4 +1,3 @@
-from echo1_geopix import __version__
 from echo1_geopix.echo1_geopix import (
     geo_point_2_pix_point,
     geo_box_2_pixel_box,
