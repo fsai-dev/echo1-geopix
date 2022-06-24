@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "echo1-geopix"
-version = "1.0.0"
+version = "1.0.1"
 description = "Helper functions to convert geo coords to pixel coords and back."
-authors = ["Michael Mohamed <michael.mohamed@echo1.io>"]
+authors = ["Michael Mohamed <michael@foundationstack.com>"]
 readme = "README.md"
 license = "MIT"
-homepage = "https://github.com/e1-io/echo1-geopix"
-repository = "https://github.com/e1-io/echo1-geopix"
+homepage = "https://github.com/fsai-dev/echo1-geopix"
+repository = "https://github.com/fsai-dev/echo1-geopix"
 
 include = [
     "LICENSE",
