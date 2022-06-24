@@ -21,8 +21,8 @@ class GeoPix:
         self, rel_x: Union[int, float], rel_y: Union[int, float]
     ) -> Dict:
         return {
-            "lat": self.min_lon + (self.max_lon - self.min_lon) * (1 - rel_y),
-            "lon": self.min_lat + (self.max_lat - self.min_lat) * (rel_x),
+            "lon": self.min_lon + (self.max_lon - self.min_lon) * (1 - rel_y),
+            "lat": self.min_lat + (self.max_lat - self.min_lat) * (rel_x),
         }
 
     @beartype
@@ -30,8 +30,8 @@ class GeoPix:
         self, lat: Union[int, float], lon: Union[int, float]
     ) -> Dict:
         return {
-            "x": ((lon - self.min_lat) / (self.max_lat - self.min_lat)),
-            "y": ((self.max_lon - lat) / (self.max_lon - self.min_lon)),
+            "x": ((lat - self.min_lat) / (self.max_lat - self.min_lat)),
+            "y": ((self.max_lon - lon) / (self.max_lon - self.min_lon)),
         }
 
     @beartype
@@ -43,10 +43,10 @@ class GeoPix:
         max_y_rel: Union[int, float],
     ) -> Dict:
         return {
-            "min_lat": self.max_lon - (self.max_lon - self.min_lon) * min_y_rel,
-            "max_lat": self.max_lon - (self.max_lon - self.min_lon) * max_y_rel,
-            "min_lon": self.min_lat + (self.max_lat - self.min_lat) * min_x_rel,
-            "max_lon": self.min_lat + (self.max_lat - self.min_lat) * max_x_rel,
+            "min_lon": self.max_lon - (self.max_lon - self.min_lon) * min_y_rel,
+            "max_lon": self.max_lon - (self.max_lon - self.min_lon) * max_y_rel,
+            "min_lat": self.min_lat + (self.max_lat - self.min_lat) * min_x_rel,
+            "max_lat": self.min_lat + (self.max_lat - self.min_lat) * max_x_rel,
         }
 
     @beartype
@@ -58,9 +58,15 @@ class GeoPix:
         _max_lon: Union[int, float],
     ) -> Dict:
 
+        min_x = (self.min_lon - _min_lat) / (_max_lat - _min_lat)
+        x_max = (self.max_lon - _min_lat) / (_max_lat - _min_lat)
+        min_y = (_max_lon - self.min_lat) / (_max_lon - _min_lon)
+        max_y = (_max_lon - self.max_lat) / (_max_lon - _min_lon)
+        return {"min_x": min_x, "min_y": min_y, "max_x": min_y, "max_y": max_y}
+
         return {
-            "min_x": (self.min_lon - _min_lat) / (_max_lat - _min_lat),
-            "max_x": (_max_lon - self.min_lat) / (_max_lon - _min_lon),
-            "min_y": (_max_lon - self.min_lat) / (_max_lon - _min_lon),
-            "max_y": (_max_lon - self.max_lat) / (_max_lon - _min_lon),
+            "min_x": (self.min_lon - _min_lon) / (_max_lat - _min_lat),
+            "max_x": (_max_lat - self.min_lat) / (_max_lon - _min_lon),
+            "min_y": (_max_lat - self.min_lat) / (_max_lon - _min_lon),
+            "max_y": (_max_lat - self.max_lat) / (_max_lon - _min_lon),
         }
