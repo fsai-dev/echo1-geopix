@@ -64,3 +64,27 @@ class GeoPix:
             "min_y": (_max_lon - self.min_lat) / (_max_lon - _min_lon),
             "max_y": (_max_lon - self.max_lat) / (_max_lon - _min_lon),
         }
+
+
+def pixel_point_2_geo_point(min_lat, max_lat, min_lon, max_lon, rel_x, rel_y):
+    p = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    return p.get_geo_points_from_rel_pixel_points(rel_x, rel_y)
+
+
+def geo_point_2_pix_point(min_lat, max_lat, min_lon, max_lon, lat, lon):
+    p = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    return p.get_rel_pixel_points_from_geo_points(lat, lon)
+
+
+def pixel_box_2_geo_box(
+    min_lat, max_lat, min_lon, max_lon, min_x_rel, min_y_rel, max_x_rel, max_y_rel
+):
+    p = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    return p.get_geo_box_from_rel_pixel_box(min_x_rel, min_y_rel, max_x_rel, max_y_rel)
+
+
+def geo_box_2_pixel_box(
+    min_lat, max_lat, min_lon, max_lon, _min_lat, _max_lat, _min_lon, _max_lon
+):
+    p = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    return p.get_rel_pixel_box_from_geo_box(_min_lat, _max_lat, _min_lon, _max_lon)
