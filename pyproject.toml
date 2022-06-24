@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "echo1-geopix"
-version = "0.1.2"
+version = "1.0.0"
 description = "Helper functions to convert geo coords to pixel coords and back."
 authors = ["Michael Mohamed <michael.mohamed@echo1.io>"]
 readme = "README.md"
@@ -15,6 +15,7 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.6.2"
 loguru = "^0.6.0"
+beartype = "^0.10.4"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"

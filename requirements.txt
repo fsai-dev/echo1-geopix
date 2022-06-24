@@ -1,6 +1,9 @@
 aiocontextvars==0.2.2; python_version < "3.7" and python_version >= "3.5" \
     --hash=sha256:885daf8261818767d8f7cbd79f9d4482d118f024b6586ef6e67980236a27bfa3 \
     --hash=sha256:f027372dc48641f683c559f247bd84962becaacdc9ba711d583c3871fb5652aa
+beartype==0.10.4; python_full_version >= "3.6.0" \
+    --hash=sha256:1a65453bc25b39979bf5ad65fe5e73350551282956456d828fb5783468649e3e \
+    --hash=sha256:24ec69f6a7f4e6e97af403d08de270def3248518060327095d23b1c4df64bf2a
 colorama==0.4.4; python_version >= "3.5" and python_full_version < "3.0.0" and sys_platform == "win32" or sys_platform == "win32" and python_version >= "3.5" and python_full_version >= "3.5.0" \
     --hash=sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2 \
     --hash=sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b

@@ -1,38 +1,66 @@
-def pixel_point_2_geo_point(left, right, top, bottom, x_min, y_min):
-    # left, right, top, bottom, x_min, y_min
-    # x and y pixel coords are in fractions from top left
-    lat = bottom + (top - bottom) * (1 - y_min)
-    lon = left + (right - left) * (x_min)
-    return {"lon": lon, "lat": lat}
+from beartype import beartype
+from beartype.typing import Dict, Union
 
 
-def geo_point_2_pix_point(left, right, top, bottom, lon, lat):
-    # left, right, top, bottom, lon, lat
-    # x and y geo coords are in latitude, longitude
-    x = (lon - left) / (right - left)
-    y = (top - lat) / (top - bottom)
-    return {"x": x, "y": y}
+class GeoPix:
+    @beartype
+    def __init__(
+        self,
+        min_lat: Union[int, float],
+        max_lat: Union[int, float],
+        min_lon: Union[int, float],
+        max_lon: Union[int, float],
+    ) -> None:
+        self.min_lat = min_lat
+        self.max_lat = max_lat
+        self.min_lon = min_lon
+        self.max_lon = max_lon
 
+    @beartype
+    def get_geo_points_from_rel_pixel_points(
+        self, rel_x: Union[int, float], rel_y: Union[int, float]
+    ) -> Dict:
+        return {
+            "lat": self.min_lon + (self.max_lon - self.min_lon) * (1 - rel_y),
+            "lon": self.min_lat + (self.max_lat - self.min_lat) * (rel_x),
+        }
 
-def pixel_box_2_geo_box(x_min, y_min, x_max, y_max, left, right, top, bottom):
-    # return coords for bounding box in lon,lat format
-    lon_min = left + (right - left) * x_min
-    lon_max = left + (right - left) * x_max
-    lat_min = top - (top - bottom) * y_min
-    lat_max = top - (top - bottom) * y_max
-    return {
-        "lon_min": lon_min,
-        "lat_min": lat_min,
-        "lon_max": lon_max,
-        "lat_max": lat_max,
-    }
+    @beartype
+    def get_rel_pixel_points_from_geo_points(
+        self, lat: Union[int, float], lon: Union[int, float]
+    ) -> Dict:
+        return {
+            "x": ((lon - self.min_lat) / (self.max_lat - self.min_lat)),
+            "y": ((self.max_lon - lat) / (self.max_lon - self.min_lon)),
+        }
 
+    @beartype
+    def get_geo_box_from_rel_pixel_box(
+        self,
+        min_x_rel: Union[int, float],
+        min_y_rel: Union[int, float],
+        max_x_rel: Union[int, float],
+        max_y_rel: Union[int, float],
+    ) -> Dict:
+        return {
+            "min_lat": self.max_lon - (self.max_lon - self.min_lon) * min_y_rel,
+            "max_lat": self.max_lon - (self.max_lon - self.min_lon) * max_y_rel,
+            "min_lon": self.min_lat + (self.max_lat - self.min_lat) * min_x_rel,
+            "max_lon": self.min_lat + (self.max_lat - self.min_lat) * max_x_rel,
+        }
 
-def geo_box_2_pixel_box(lon_min, lat_min, lon_max, lat_max, left, right, top, bottom):
-    # return coords for bounding box in pixel coords for a specific image
-    # as percentage of image width and height
-    x_min = (lon_min - left) / (right - left)
-    x_max = (lon_max - left) / (right - left)
-    y_min = (top - lat_min) / (top - bottom)
-    y_max = (top - lat_max) / (top - bottom)
-    return {"x_min": x_min, "y_min": y_min, "x_max": y_min, "y_max": y_max}
+    @beartype
+    def get_rel_pixel_box_from_geo_box(
+        self,
+        _min_lat: Union[int, float],
+        _max_lat: Union[int, float],
+        _min_lon: Union[int, float],
+        _max_lon: Union[int, float],
+    ) -> Dict:
+
+        return {
+            "min_x": (self.min_lon - _min_lat) / (_max_lat - _min_lat),
+            "max_x": (_max_lon - self.min_lat) / (_max_lon - _min_lon),
+            "min_y": (_max_lon - self.min_lat) / (_max_lon - _min_lon),
+            "max_y": (_max_lon - self.max_lat) / (_max_lon - _min_lon),
+        }
