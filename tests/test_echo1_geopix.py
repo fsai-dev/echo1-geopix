@@ -1,21 +1,18 @@
-from echo1_geopix.echo1_geopix import (
-    geo_point_2_pix_point,
-    geo_box_2_pixel_box,
-    pixel_point_2_geo_point,
-    pixel_box_2_geo_box,
-)
+from echo1_geopix.echo1_geopix import GeoPix
 from loguru import logger
 from math import isclose
 
-# test values
-x_min = 0.35596034
-y_min = 0.94408214
-x_max = 0.4102673
-y_max = 0.9986186
-top = 19.013473367825767
-bottom = 19.003535899073533
-left = -98.27081680297852
-right = -98.26036944570143
+# test values (rel pixel values)
+min_x_rel = 0.35596034
+min_y_rel = 0.94408214
+max_x_rel = 0.4102673
+max_y_rel = 0.9986186
+
+# test values (geo values)
+min_lat = -98.27081680297852
+max_lat = -98.26036944570143
+min_lon = 19.003535899073533
+max_lon = 19.013473367825767
 
 
 def test_point_funcs():
@@ -23,47 +20,64 @@ def test_point_funcs():
     ##
     # pixel_point_2_geo_point
     ##
-    tmp_geo_coords = pixel_point_2_geo_point(left, right, top, bottom, x_min, y_min)
-    logger.debug("pixel_point_2_geo_point: {}".format(tmp_geo_coords))
+    gp = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    tmp_geo_coords = gp.get_geo_points_from_rel_pixel_points(min_x_rel, min_y_rel)
+    assert tmp_geo_coords == {"lon": -98.26709795813007, "lat": 19.004091581059974}
+    # logger.debug("pixel_point_2_geo_point: {}".format(tmp_geo_coords))
 
     ##
     # geo_point_2_pix_point
     ##
-    tmp_pixel_coords = geo_point_2_pix_point(
-        left, right, top, bottom, tmp_geo_coords["lon"], tmp_geo_coords["lat"]
+    gp = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    tmp_pixel_coords = gp.get_rel_pixel_points_from_geo_points(
+        tmp_geo_coords["lat"], tmp_geo_coords["lon"]
     )
-    logger.debug("geo_point_2_pix_point: {}".format(tmp_pixel_coords))
-    assert isclose(x_min, tmp_pixel_coords["x"], abs_tol=1e-8)
+    assert tmp_pixel_coords == {"x": 0.3559603399996717, "y": 0.9440821400000854}
+    assert isclose(min_x_rel, tmp_pixel_coords["x"], abs_tol=1e-8)
+    assert isclose(min_y_rel, tmp_pixel_coords["y"], abs_tol=1e-8)
+    # logger.debug("geo_point_2_pix_point: {}".format(tmp_pixel_coords))
 
 
 def test_box_funcs():
+
     ##
     # pixel_box_2_geo_box
     ##
-    tmp_geo_box = pixel_box_2_geo_box(
-        x_min, y_min, x_max, y_max, left, right, top, bottom
+    gp = GeoPix(min_lat, max_lat, min_lon, max_lon)
+    tmp_geo_box = gp.get_geo_box_from_rel_pixel_box(
+        min_x_rel,
+        min_y_rel,
+        max_x_rel,
+        max_y_rel,
     )
-    assert "lon_min" in tmp_geo_box
-    assert "lon_max" in tmp_geo_box
-    assert "lat_min" in tmp_geo_box
-    assert "lat_max" in tmp_geo_box
-    logger.debug("pixel_box_2_geo_box: {}".format(tmp_geo_box))
+
+    assert tmp_geo_box == {
+        "min_lon": -98.26709795813007,
+        "max_lon": -98.26653059391631,
+        "min_lat": 19.004091581059974,
+        "max_lat": 19.003549626692866,
+    }
+    # logger.debug("pixel_box_2_geo_box: {}".format(tmp_geo_box))
 
     ##
     # geo_box_2_pixel_box
     ##
-    temp_pixel_box = geo_box_2_pixel_box(
-        tmp_geo_box["lon_min"],
-        tmp_geo_box["lat_min"],
-        tmp_geo_box["lon_max"],
-        tmp_geo_box["lat_max"],
-        left,
-        right,
-        top,
-        bottom,
+    gp = GeoPix(
+        tmp_geo_box["min_lat"],
+        tmp_geo_box["max_lat"],
+        tmp_geo_box["min_lon"],
+        tmp_geo_box["max_lon"],
     )
-    assert "x_min" in temp_pixel_box
-    assert "y_min" in temp_pixel_box
-    assert "x_max" in temp_pixel_box
-    assert "y_max" in temp_pixel_box
-    logger.debug("geo_box_2_pixel_box: {}".format(temp_pixel_box))
+
+    temp_pixel_box = gp.get_rel_pixel_box_from_geo_box(
+        min_lat, max_lat, min_lon, max_lon
+    )
+
+    assert temp_pixel_box == {
+        "min_x": 0.3559603399996717,
+        "min_y": 0.9440821400000854,
+        "max_x": 0.9440821400000854,
+        "max_y": 0.998618600000152,
+    }
+
+    # logger.debug("geo_box_2_pixel_box: {}".format(temp_pixel_box))

@@ -32,6 +32,21 @@ tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)"
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
 
 [[package]]
+name = "beartype"
+version = "0.10.4"
+description = "Unbearably fast runtime type checking in pure Python."
+category = "main"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.extras]
+all = ["typing-extensions (>=3.10.0.0)"]
+dev = ["coverage (>=5.5)", "sphinx", "pytest (>=4.0.0)", "tox (>=3.20.1)", "sphinx (>=4.1.0)", "mypy (>=0.800)", "typing-extensions", "numpy"]
+doc-rtd = ["sphinx (==4.1.0)", "sphinx-rtd-theme (==0.5.1)"]
+test-tox = ["sphinx", "pytest (>=4.0.0)", "mypy (>=0.800)", "typing-extensions", "numpy"]
+test-tox-coverage = ["coverage (>=5.5)"]
+
+[[package]]
 name = "black"
 version = "21.12b0"
 description = "The uncompromising code formatter."
@@ -47,7 +62,10 @@ pathspec = ">=0.9.0,<1"
 platformdirs = ">=2"
 tomli = ">=0.2.6,<2.0.0"
 typed-ast = {version = ">=1.4.2", markers = "python_version < \"3.8\" and implementation_name == \"cpython\""}
-typing-extensions = ">=3.10.0.0"
+typing-extensions = [
+    {version = ">=3.10.0.0", markers = "python_version < \"3.10\""},
+    {version = "!=3.10.0.1", markers = "python_version >= \"3.10\""},
+]
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -294,8 +312,8 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 
 [metadata]
 lock-version = "1.1"
-python-versions = "=3.6.2"
-content-hash = "68a5aec0e118679825485f88925593b0f519b04d5227c11327dc0ea724cab78a"
+python-versions = ">=3.6.2"
+content-hash = "48311eb16ad2daef6fb1285dfb857bc979e6f13d757f0951cf72c904ca235e81"
 
 [metadata.files]
 aiocontextvars = [
@@ -309,6 +327,10 @@ atomicwrites = [
 attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},
     {file = "attrs-21.4.0.tar.gz", hash = "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"},
+]
+beartype = [
+    {file = "beartype-0.10.4-py3-none-any.whl", hash = "sha256:1a65453bc25b39979bf5ad65fe5e73350551282956456d828fb5783468649e3e"},
+    {file = "beartype-0.10.4.tar.gz", hash = "sha256:24ec69f6a7f4e6e97af403d08de270def3248518060327095d23b1c4df64bf2a"},
 ]
 black = [
     {file = "black-21.12b0-py3-none-any.whl", hash = "sha256:a615e69ae185e08fdd73e4715e260e2479c861b5740057fde6e8b4e3b7dd589f"},
