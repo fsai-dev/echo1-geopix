@@ -67,15 +67,21 @@ def test_box_funcs():
     ##
     # geo_box_2_pixel_box
     ##
-    gp = GeoPix(
+    print(200, min_lat)
+    gp = GeoPix(min_lat, max_lat, min_lon, max_lon)
+
+    # print(100)
+    # print(
+    #     tmp_geo_box["min_lat"],
+    #     tmp_geo_box["max_lat"],
+    #     tmp_geo_box["min_lon"],
+    #     tmp_geo_box["max_lon"],
+    # )
+    temp_pixel_box = gp.get_rel_pixel_box_from_geo_box(
         tmp_geo_box["min_lat"],
         tmp_geo_box["max_lat"],
         tmp_geo_box["min_lon"],
         tmp_geo_box["max_lon"],
-    )
-
-    temp_pixel_box = gp.get_rel_pixel_box_from_geo_box(
-        min_lat, max_lat, min_lon, max_lon
     )
 
     print(temp_pixel_box)

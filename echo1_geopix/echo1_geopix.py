@@ -58,15 +58,43 @@ class GeoPix:
         _max_lon: Union[int, float],
     ) -> Dict:
 
-        min_x = (self.min_lon - _min_lat) / (_max_lat - _min_lat)
-        x_max = (self.max_lon - _min_lat) / (_max_lat - _min_lat)
-        min_y = (_max_lon - self.min_lat) / (_max_lon - _min_lon)
-        max_y = (_max_lon - self.max_lat) / (_max_lon - _min_lon)
-        return {"min_x": min_x, "min_y": min_y, "max_x": min_y, "max_y": max_y}
+        # lon_min = _min_lon
+        # lat_min = _min_lat
+        # lon_max = _max_lon
+        # lat_max = _max_lat
 
-        return {
-            "min_x": (self.min_lon - _min_lon) / (_max_lat - _min_lat),
-            "max_x": (_max_lat - self.min_lat) / (_max_lon - _min_lon),
-            "min_y": (_max_lat - self.min_lat) / (_max_lon - _min_lon),
-            "max_y": (_max_lat - self.max_lat) / (_max_lon - _min_lon),
-        }
+        # top = self.max_lat
+        # bottom = self.min_lat
+        # left = self.min_lon
+        # right = self.max_lon
+
+        lon_min = _min_lon
+        lat_min = _min_lat
+        lon_max = _max_lon
+        lat_max = _max_lat
+
+        top = self.max_lat
+        bottom = self.min_lat
+        left = self.min_lon
+        right = self.max_lon
+
+        # print(100)
+        # print(left, self.min_lon, lon_min, _min_lon)
+        # print(bottom, self.min_lat, lat_min, _min_lat)
+        # print(right, self.max_lon, lon_max, _max_lon)
+        # print(top, self.max_lat, lat_max, _max_lat)
+
+        # return coords for bounding box in pixel coords for a specific image
+        # as percentage of image width and height
+        x_min = (lon_min - left) / (right - left)
+        x_max = (lon_max - left) / (right - left)
+        y_min = (top - lat_min) / (top - bottom)
+        y_max = (top - lat_max) / (top - bottom)
+        return {"x_min": x_min, "y_min": y_min, "x_max": y_min, "y_max": y_max}
+
+        # return {
+        #     "min_x": (self.min_lon - _min_lon) / (_max_lat - _min_lat),
+        #     "max_x": (_max_lat - self.min_lat) / (_max_lon - _min_lon),
+        #     "min_y": (_max_lat - self.min_lat) / (_max_lon - _min_lon),
+        #     "max_y": (_max_lat - self.max_lat) / (_max_lon - _min_lon),
+        # }
